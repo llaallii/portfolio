@@ -39,3 +39,22 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# turbopack (Next.js 15)
+.turbopack/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+Thumbs.db
+
+# Local env files (keep .env.local.example)
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
