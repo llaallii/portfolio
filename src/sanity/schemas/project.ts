@@ -45,6 +45,76 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: "role",
+      title: "Your Role",
+      type: "string",
+      description:
+        "Your specific role in the project (e.g., Lead Engineer, Systems Engineer)",
+    }),
+    defineField({
+      name: "duration",
+      title: "Project Duration",
+      type: "string",
+      description:
+        "Timeline of the project (e.g., '6 months' or 'Jan 2023 - Jun 2023')",
+    }),
+    defineField({
+      name: "challenge",
+      title: "Challenge / Problem",
+      type: "array",
+      of: [{ type: "block" }],
+      description: "What problem or challenge was the project addressing?",
+    }),
+    defineField({
+      name: "constraints",
+      title: "Constraints",
+      type: "array",
+      of: [{ type: "block" }],
+      description: "Regulatory, technical, or business constraints faced",
+    }),
+    defineField({
+      name: "approach",
+      title: "Approach / Solution",
+      type: "array",
+      of: [{ type: "block" }],
+      description:
+        "How you approached the problem - methods, tools, techniques used",
+    }),
+    defineField({
+      name: "outcomes",
+      title: "Outcomes / Results",
+      type: "array",
+      of: [{ type: "block" }],
+      description: "Quantifiable results, achievements, and impact",
+    }),
+    defineField({
+      name: "gallery",
+      title: "Image Gallery",
+      type: "array",
+      of: [
+        {
+          type: "image",
+          options: {
+            hotspot: true,
+          },
+          fields: [
+            {
+              name: "alt",
+              type: "string",
+              title: "Alternative text",
+              description: "Important for SEO and accessibility",
+            },
+            {
+              name: "caption",
+              type: "string",
+              title: "Caption",
+            },
+          ],
+        },
+      ],
+      description: "Screenshots, diagrams, or visual assets for the project",
+    }),
+    defineField({
       name: "technologies",
       title: "Technologies",
       type: "array",

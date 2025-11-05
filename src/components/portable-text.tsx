@@ -3,6 +3,8 @@ import {
   PortableTextComponents,
 } from "@portabletext/react";
 import { PortableTextBlock } from "@portabletext/types";
+import Image from "next/image";
+import { urlFor } from "@/lib/image";
 
 const components: PortableTextComponents = {
   block: {
@@ -24,6 +26,30 @@ const components: PortableTextComponents = {
         {children}
       </blockquote>
     ),
+  },
+  types: {
+    image: ({ value }) => {
+      if (!value?.asset?._ref) {
+        return null;
+      }
+      return (
+        <figure className="my-8">
+          <div className="relative aspect-video overflow-hidden rounded-lg">
+            <Image
+              src={urlFor(value).width(1200).height(675).url()}
+              alt={value.alt || "Image"}
+              fill
+              className="object-cover"
+            />
+          </div>
+          {value.caption && (
+            <figcaption className="text-muted-foreground mt-2 text-center text-sm italic">
+              {value.caption}
+            </figcaption>
+          )}
+        </figure>
+      );
+    },
   },
   list: {
     bullet: ({ children }) => (

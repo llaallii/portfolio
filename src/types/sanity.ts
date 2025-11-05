@@ -38,6 +38,15 @@ export interface Post {
   tags?: Tag[];
 }
 
+export interface ProjectGalleryImage {
+  asset: {
+    _ref: string;
+    _type: "reference";
+  };
+  alt?: string;
+  caption?: string;
+}
+
 export interface Project {
   _id: string;
   title: string;
@@ -50,6 +59,13 @@ export interface Project {
     };
   };
   description?: PortableTextBlock[];
+  role?: string;
+  duration?: string;
+  challenge?: PortableTextBlock[];
+  constraints?: PortableTextBlock[];
+  approach?: PortableTextBlock[];
+  outcomes?: PortableTextBlock[];
+  gallery?: ProjectGalleryImage[];
   technologies?: string[];
   projectUrl?: string;
   githubUrl?: string;
