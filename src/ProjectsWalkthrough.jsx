@@ -6,7 +6,7 @@ import React from 'react';
    plus a closing "Let's talk" slide.
    ============================================================ */
 
-const PROJECTS = [
+export const PROJECTS = [
   {
     id: 'smarthub',
     chapter: 'Ch. 01',
@@ -56,7 +56,7 @@ const PROJECTS = [
   },
 ];
 
-const ELEXY = {
+export const ELEXY = {
   id: 'elexy',
   chapter: 'Ch. 03',
   num: '05 / 12',
@@ -81,7 +81,7 @@ const ELEXY = {
 };
 
 /* ——— Project intro slide ——— */
-function ProjectSlide({ p }) {
+export function ProjectSlide({ p }) {
   return (
     <section className="relative w-full bg-paper py-20 md:py-28">
       <div className="mx-auto max-w-[1440px] px-6 md:px-12">
@@ -202,7 +202,7 @@ function ProjectSlide({ p }) {
 }
 
 /* ——— Outcome slide (media left, big-stat list right) ——— */
-function OutcomeSlide({
+export function OutcomeSlide({
   num,
   label,
   sig,
@@ -291,7 +291,7 @@ function OutcomeSlide({
 }
 
 /* ——— Closing slide ——— */
-function ClosingSlide() {
+export function ClosingSlide() {
   return (
     <section className="relative w-full bg-paper py-20 md:py-28">
       <div className="mx-auto max-w-[1440px] px-6 md:px-12">
@@ -384,6 +384,59 @@ function ClosingSlide() {
     </section>
   );
 }
+
+export const OUTCOME_JIG = {
+  num: '04 / 12',
+  label: 'Outcomes · Custom Jig · Python ATE',
+  sig: 'Built it. Measured it.',
+  kicker: 'Outcomes · Quantified',
+  headline: 'Built by hand',
+  tagline: 'A custom in-house jig that quietly replaced the commercial ATE.',
+  media: '/equipment.png',
+  chapterTag: 'Custom test jig · SBC ATE',
+  rows: [
+    {
+      n: '90',
+      u: '%',
+      label: 'Cycle time cut',
+      body: 'Validation cycle time cut on Molly cCap via Python ATE on SBC.',
+    },
+    {
+      n: '8',
+      u: '%',
+      label: 'Tooling savings',
+      body: 'V&V tooling savings. In-house SBC fixtures replaced commercial ATE.',
+    },
+  ],
+};
+
+export const OUTCOME_BENCH = {
+  num: '06 / 12',
+  label: 'Outcomes · Power Unit Test Bench · DOE',
+  sig: 'Built it. Characterized it.',
+  kicker: 'Outcomes · Quantified',
+  headline: 'Mapped the margin',
+  tagline:
+    'A bench that turned plunger force, dose accuracy and timing into a defensible process window.',
+  media: '/testbench.png',
+  chapterTag: 'Power Unit Test Bench · Elexy',
+  rows: [
+    {
+      n: '75',
+      u: '%',
+      label: 'Variance reduced',
+      body:
+        'Output variance reduced on Elexy through DOE-driven characterization across electrical and mechanical parameters.',
+    },
+    {
+      n: 'Pre-NPI',
+      label: 'Failures caught early',
+      body:
+        'Stepper-motor validation, IQC protocols and cross-domain failures surfaced before NPI release.',
+      numSize: 'clamp(40px, 5vw, 96px)',
+    },
+  ],
+};
 
 export default function ProjectsWalkthrough() {
   return (

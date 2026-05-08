@@ -1,12 +1,12 @@
 import React from 'react';
 
-const FACTS = [
+export const FACTS = [
   { k: 'Experience', v: '3+ yrs · SHL Technologies' },
   { k: 'Education', v: 'M.S. EE · NTUT  ·  B.Tech. EE · IIT Ropar' },
   { k: 'Languages', v: 'English (TOEIC 825) · Hindi · Mandarin' },
 ];
 
-const SKILL_VOLUMES = [
+export const SKILL_VOLUMES = [
   {
     vol: 'Vol. 1',
     kicker: 'The discipline',
@@ -200,7 +200,7 @@ const SKILL_VOLUMES = [
 ];
 
 /* ——— Profile slide ——— */
-function ProfileSlide() {
+export function ProfileSlide() {
   return (
     <section
       id="about"
@@ -274,7 +274,7 @@ function ProfileSlide() {
 }
 
 /* ——— Skills volume slide ——— */
-function SkillVolume({ vol, idx }) {
+export function SkillVolume({ vol, idx }) {
   return (
     <section className="relative w-full bg-paper py-20 md:py-28">
       <div className="mx-auto max-w-[1440px] px-6 md:px-12">
