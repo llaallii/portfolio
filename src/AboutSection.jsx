@@ -1,173 +1,102 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import {
-  Layers,
-  CheckCircle2,
-  TerminalSquare,
-  Cpu,
-  Radio,
-  Binary,
-  BarChart3,
-  SearchCheck,
-  ShieldCheck,
-  Code2,
-  Wrench,
-  Boxes,
-  Languages,
-  MapPin,
-  GraduationCap,
-  Briefcase,
-  ArrowLeft,
-  ArrowRight,
-} from 'lucide-react';
-
-const SUMMARY =
-  'Electrical Engineer with 3+ years delivering system integration, test automation, and V&V on embedded electromechanical platforms — from requirements through NPI and HVM readiness. Strong in Python-based ATE, DOE/SPC-driven characterization, and cross-domain HW/FW/ME debug backed by structured RCA. M.S. EE (NTUT) and B.Tech. EE (IIT Ropar), fluent in turning ambiguous user needs into traceable, regulatory-aligned engineering outcomes.';
+import React from 'react';
 
 const FACTS = [
-  { Icon: Briefcase, k: 'Experience', v: '3+ yrs · SHL Technologies' },
-  { Icon: GraduationCap, k: 'Education', v: 'M.S. EE · NTUT   ·   B.Tech. EE · IIT Ropar' },
-  { Icon: MapPin, k: 'Based in', v: 'Taoyuan, Taiwan · Open to relocate' },
-  { Icon: Languages, k: 'Languages', v: 'English (TOEIC 825) · Hindi · Mandarin' },
+  { k: 'Experience', v: '3+ yrs · SHL Technologies' },
+  { k: 'Education', v: 'M.S. EE · NTUT  ·  B.Tech. EE · IIT Ropar' },
+  { k: 'Languages', v: 'English (TOEIC 825) · Hindi · Mandarin' },
 ];
 
-const SKILLS = [
+const SKILL_VOLUMES = [
   {
-    Icon: Layers,
-    title: 'Systems Engineering & Requirements',
-    tagline: 'Turning ambiguous user needs into traceable engineering artifacts.',
-    groups: [
+    vol: 'Vol. 1',
+    kicker: 'The discipline',
+    headline: ['Requirements,', 'qualification,', 'automation'],
+    pages: 'three categories · twelve total',
+    next: 'Next → Hardware & Embedded',
+    cols: [
       {
-        h: 'Modeling',
+        num: '01 / 12',
+        h: 'Systems Engineering & Requirements',
+        tag: 'Turning ambiguous user needs into traceable engineering artifacts.',
         items: [
-          'MBSE (SysML / UML)',
+          'MBSE · SysML / UML',
           'Enterprise Architect',
-          'Cameo Systems Modeler (CATIA Magic)',
-        ],
-      },
-      {
-        h: 'Requirements',
-        items: [
-          'Elicitation & decomposition',
-          'SRS / SDS / URS / EURS / ESDS / EDS authoring',
-          'Requirements-to-test traceability',
-        ],
-      },
-      {
-        h: 'Lifecycle',
-        items: [
-          'ISO/IEC/IEEE 15288',
-          'ISO/IEC/IEEE 29148',
+          'Cameo Systems Modeler',
+          'SRS · SDS · URS · EURS · ESDS · EDS',
+          'Requirements → test traceability',
+          'ISO/IEC/IEEE 15288 · 29148',
           'Design transfer',
-          'Stakeholder collaboration',
         ],
       },
-    ],
-  },
-  {
-    Icon: CheckCircle2,
-    title: 'Verification & Validation',
-    tagline: 'Risk-based strategy, qualified fixtures, release-ready evidence.',
-    groups: [
       {
-        h: 'Strategy',
-        items: ['Risk-based test strategy', 'Release readiness (go / no-go)'],
-      },
-      {
-        h: 'Qualification',
-        items: ['IQ / OQ / PQ', 'TMV', 'Gage R&R (GRR)', 'Fixture qualification'],
-      },
-      {
-        h: 'Execution',
-        items: ['Bench validation', 'Test plans / protocols / reports'],
-      },
-    ],
-  },
-  {
-    Icon: TerminalSquare,
-    title: 'Test Automation & ATE',
-    tagline: 'Python ATE & SBC-based fixtures that cut cycle time up to 90%.',
-    groups: [
-      {
-        h: 'Automation',
+        num: '02 / 12',
+        h: 'Verification & Validation',
+        tag: 'Risk-based strategy, qualified fixtures, release-ready evidence.',
         items: [
-          'Python-based ATE / CATS',
-          'pytest / unittest',
+          'Risk-based test strategy',
+          'Release readiness (go / no-go)',
+          'IQ / OQ / PQ',
+          'TMV · Gage R&R',
+          'Fixture qualification',
+          'Bench validation',
+          'Test plans · protocols · reports',
+        ],
+      },
+      {
+        num: '03 / 12',
+        h: 'Test Automation & ATE',
+        tag: 'Python ATE & SBC fixtures that cut cycle time up to 90%.',
+        items: [
+          'Python ATE / CATS',
+          'pytest · unittest',
           'State-machine test logic',
-        ],
-      },
-      {
-        h: 'Fixtures',
-        items: ['Custom test jigs & fixtures', 'SBC platforms (Raspberry Pi)'],
-      },
-      {
-        h: 'Test Regimes',
-        items: [
-          'Parametric sweeps',
-          'Endurance testing',
+          'Custom test jigs & fixtures',
+          'SBC platforms (Raspberry Pi)',
+          'Parametric sweeps · Endurance',
           'Timing / margin validation',
         ],
       },
     ],
   },
   {
-    Icon: Cpu,
-    title: 'Hardware & Electronics',
-    tagline: 'Schematic-to-bench: PCBA, power, timing, and sensor calibration.',
-    groups: [
+    vol: 'Vol. 2',
+    kicker: 'The bench',
+    headline: ['Schematic,', 'signal,', 'silicon'],
+    pages: 'three categories · twelve total',
+    next: 'Next → Method & Quality',
+    cols: [
       {
-        h: 'EDA',
-        items: ['Altium Designer', 'Schematic capture', 'Pin mapping · Net routing'],
-      },
-      {
-        h: 'Analysis',
+        num: '04 / 12',
+        h: 'Hardware & Electronics',
+        tag: 'Schematic-to-bench: PCBA, power, timing, sensor calibration.',
         items: [
-          'PCBA-level validation',
-          'Signal-chain analysis',
-          'Power-behavior analysis',
-          'Timing-margin analysis',
-        ],
-      },
-      {
-        h: 'Power & Instrumentation',
-        items: [
-          'DC-DC switching',
-          'Power rail / PDN design',
+          'Altium Designer',
+          'Schematic capture · Pin map · Net routing',
+          'PCBA validation · Signal-chain analysis',
+          'Power-behavior · Timing-margin',
+          'DC-DC switching · PDN design',
           'Oscilloscope · Multimeter',
+          'Stepper motors · RFID / optical sensors',
         ],
       },
       {
-        h: 'Actuators & Sensors',
-        items: ['Stepper motor testing', 'RFID / optical sensor calibration'],
-      },
-    ],
-  },
-  {
-    Icon: Radio,
-    title: 'Embedded Interfaces & Protocols',
-    tagline: 'Wired, wireless, and the tools to sniff them all.',
-    groups: [
-      {
-        h: 'Serial',
-        items: ['UART', 'SPI', 'I²C', 'RS-232 / 422 / 485'],
+        num: '05 / 12',
+        h: 'Embedded Interfaces & Protocols',
+        tag: 'Wired, wireless, and the tools to sniff them all.',
+        items: [
+          'UART · SPI · I²C',
+          'RS-232 / 422 / 485',
+          'BLE · LTE Cat-M1 · RFID',
+          'USB 2.0 / 3.0 · Ethernet PoE',
+          'pyserial · bleak',
+          'pyshark · Wireshark',
+        ],
       },
       {
-        h: 'Wireless & Bus',
-        items: ['BLE', 'LTE Cat-M1', 'RFID', 'USB 2.0 / 3.0', 'Ethernet PoE'],
-      },
-      {
-        h: 'Debug Tooling',
-        items: ['pyserial', 'bleak', 'pyshark', 'Wireshark'],
-      },
-    ],
-  },
-  {
-    Icon: Binary,
-    title: 'Digital Design',
-    tagline: 'Foundations in digital logic and semiconductor devices.',
-    note: 'Coursework',
-    groups: [
-      {
-        h: 'Logic & VLSI',
+        num: '06 / 12',
+        sub: '· Coursework',
+        h: 'Digital Design',
+        tag: 'Foundations in digital logic and semiconductor devices.',
         items: [
           'Digital logic design',
           'Verilog',
@@ -179,278 +108,245 @@ const SKILLS = [
     ],
   },
   {
-    Icon: BarChart3,
-    title: 'Data Analysis & Statistics',
-    tagline: 'DOE-led characterization, variance reduction, signal processing.',
-    groups: [
+    vol: 'Vol. 3',
+    kicker: 'The method',
+    headline: ['DOE,', 'RCA,', 'regulated workflows'],
+    pages: 'three categories · twelve total',
+    next: 'Next → Toolkit & Field',
+    cols: [
       {
-        h: 'Statistics',
+        num: '07 / 12',
+        h: 'Data Analysis & Statistics',
+        tag: 'DOE-led characterization, variance reduction, signal processing.',
         items: [
-          'DOE',
-          'SPC',
-          'ANOVA',
-          'Capability analysis',
-          'MSA',
-          'Variance reduction',
-        ],
-      },
-      { h: 'Tools', items: ['Minitab', 'JMP'] },
-      {
-        h: 'Python Stack',
-        items: [
+          'DOE · SPC · ANOVA',
+          'Capability analysis · MSA',
+          'Minitab · JMP',
           'NumPy · Pandas · SciPy',
-          'Matplotlib · seaborn',
-          'scikit-learn',
+          'Matplotlib · seaborn · scikit-learn',
+          'FFT · Filtering',
+          'NMF · RPCA · REpet',
         ],
       },
       {
-        h: 'Signal Processing',
-        items: ['FFT · Filtering', 'NMF · RPCA · REpet'],
-      },
-    ],
-  },
-  {
-    Icon: SearchCheck,
-    title: 'Failure Analysis & RCA',
-    tagline: 'Cross-domain debug with structured root cause analysis.',
-    groups: [
-      {
-        h: 'RCA',
+        num: '08 / 12',
+        h: 'Failure Analysis & RCA',
+        tag: 'Cross-domain debug with structured root cause analysis.',
         items: [
-          'Cross-domain debug (HW / FW / ME / EE)',
+          'HW / FW / ME / EE debug',
           'Structured Root Cause Analysis',
           'DFMEA',
-        ],
-      },
-      {
-        h: 'Characterization',
-        items: ['Failure characterization', 'Stress / component testing'],
-      },
-      {
-        h: 'Pipelines',
-        items: [
+          'Failure characterization',
+          'Stress / component testing',
           'Log & packet analysis pipelines',
           'Corrective action implementation',
         ],
       },
-    ],
-  },
-  {
-    Icon: ShieldCheck,
-    title: 'Quality, Compliance & NPI',
-    tagline: 'NPD → NPI → HVM readiness, aligned with regulated-industry standards.',
-    groups: [
       {
-        h: 'Standards',
+        num: '09 / 12',
+        h: 'Quality, Compliance & NPI',
+        tag: 'NPD → NPI → HVM readiness, aligned with regulated standards.',
         items: [
-          'ISO 13485',
-          'ISO 14971',
-          'ISO 11608',
-          'IEC 60601',
-          'IEC 62304',
-          'ISO 9001',
-        ],
-      },
-      {
-        h: 'Workflows',
-        items: ['QMS & PLM', 'NPD → NPI → HVM readiness', 'Design & supplier transfer'],
-      },
-      {
-        h: 'Quality Gates',
-        items: [
-          'IQC protocols',
-          'AQL sampling',
-          'DFM / DFA reviews',
-          'Obsolescence / sustenance',
-        ],
-      },
-      {
-        h: 'Regulatory Awareness',
-        items: [
-          'FDA',
-          'EU MDR',
-          'NMPA',
-          'TGA',
-          'Health Canada',
-          'MHLW',
+          'ISO 13485 · 14971 · 11608 · 9001',
+          'IEC 60601 · 62304',
+          'QMS · PLM · Design / supplier transfer',
+          'IQC · AQL · DFM / DFA',
+          'FDA · EU MDR · NMPA · TGA · MHLW',
         ],
       },
     ],
   },
   {
-    Icon: Code2,
-    title: 'Programming & Software',
-    tagline: 'Python for everything that touches the bench.',
-    groups: [{ h: 'Languages', items: ['Python (primary)', 'C', 'C++'] }],
-  },
-  {
-    Icon: Wrench,
-    title: 'Field / Customer-Facing',
-    tagline: 'Comfortable at the customer site — FSE / FAE / CSE adjacent.',
-    note: 'FSE · FAE · CSE adjacent',
-    groups: [
+    vol: 'Vol. 4',
+    kicker: 'The toolkit',
+    headline: ['Code,', 'customer site,', 'day-to-day'],
+    pages: 'three categories · twelve total',
+    next: 'End of matrix · 12 of 12',
+    cols: [
       {
-        h: 'On-site',
-        items: ['On-site commissioning', 'Troubleshooting documentation'],
+        num: '10 / 12',
+        h: 'Programming & Software',
+        tag: 'Python for everything that touches the bench.',
+        items: ['Python (primary)', 'C', 'C++'],
       },
       {
-        h: 'Communication',
+        num: '11 / 12',
+        sub: '· FSE · FAE · CSE',
+        h: 'Field / Customer-Facing',
+        tag: 'Comfortable at the customer site.',
         items: [
-          'Cross-functional stakeholder communication',
+          'On-site commissioning',
+          'Troubleshooting documentation',
+          'Cross-functional stakeholder comms',
           'Go / no-go reporting',
           'Technical documentation authoring',
           'Third-party lab coordination',
         ],
       },
-    ],
-  },
-  {
-    Icon: Boxes,
-    title: 'Tools & Platforms',
-    tagline: 'The day-to-day toolchain.',
-    groups: [
       {
-        h: 'ALM · PLM',
-        items: ['Siemens Polarion (ALM)', 'Siemens Teamcenter (PLM)'],
+        num: '12 / 12',
+        h: 'Tools & Platforms',
+        tag: 'The day-to-day toolchain.',
+        items: [
+          'Siemens Polarion (ALM)',
+          'Siemens Teamcenter (PLM)',
+          'JIRA · Confluence · Git',
+          'Linux · Docker · Kubernetes',
+          'VS Code · MS Office',
+        ],
       },
-      { h: 'Collaboration', items: ['JIRA', 'Confluence', 'Git'] },
-      { h: 'Runtime', items: ['Linux', 'Docker', 'Kubernetes'] },
-      { h: 'Workstation', items: ['VS Code', 'MS Office'] },
     ],
   },
 ];
 
-function useInView(ref, threshold = 0.35) {
-  const [inView, setInView] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => setInView(entry.intersectionRatio > threshold),
-      { threshold: [0, threshold, 0.6, 1] }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [ref, threshold]);
-  return inView;
-}
-
-function useKeyboardNav(enabled, onPrev, onNext) {
-  useEffect(() => {
-    if (!enabled) return;
-    const handler = (e) => {
-      if (e.target && /INPUT|TEXTAREA/.test(e.target.tagName)) return;
-      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
-        e.preventDefault();
-        onNext();
-      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
-        e.preventDefault();
-        onPrev();
-      }
-    };
-    window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
-  }, [enabled, onPrev, onNext]);
-}
-
-function ChapterRail({ total, current, onJump, visible }) {
+/* ——— Profile slide ——— */
+function ProfileSlide() {
   return (
-    <div
-      className={`pointer-events-auto fixed right-6 top-1/2 z-30 hidden -translate-y-1/2 flex-col gap-2 transition-opacity duration-300 md:flex ${
-        visible ? 'opacity-100' : 'pointer-events-none opacity-0'
-      }`}
+    <section
+      id="about"
+      className="relative w-full bg-paper py-20 md:py-28"
     >
-      {Array.from({ length: total }).map((_, i) => {
-        const active = i === current;
-        return (
-          <button
-            key={i}
-            type="button"
-            onClick={() => onJump(i)}
-            aria-label={`Jump to skill ${i + 1}`}
-            className="group flex items-center gap-2"
-          >
-            <span
-              className={`font-jakarta text-[10px] font-bold uppercase tracking-[0.22em] transition-colors ${
-                active ? 'text-mint' : 'text-white/40 group-hover:text-white/70'
-              }`}
+      <div className="mx-auto max-w-[1440px] px-6 md:px-12">
+        {/* slide head */}
+        <div className="slide-head">
+          <div className="h-left">
+            <span className="num">01 / 12</span>
+            <span className="pipe" />
+            <span className="label">About the engineer</span>
+          </div>
+          <span className="signature">A brief introduction</span>
+        </div>
+
+        <div className="grid grid-cols-1 items-stretch gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-20">
+          <div className="flex flex-col justify-center gap-8">
+            <h2
+              className="font-sans font-extrabold uppercase tracking-[-0.04em] text-ink"
+              style={{ fontSize: 'clamp(56px, 9vw, 128px)', lineHeight: 0.92, margin: 0 }}
             >
-              {String(i + 1).padStart(2, '0')}
-            </span>
-            <span
-              className={`h-px transition-all duration-500 ${
-                active ? 'w-10 bg-mint' : 'w-4 bg-white/30 group-hover:bg-white/70'
-              }`}
-            />
-          </button>
-        );
-      })}
-    </div>
+              About<span className="text-mint">.</span>
+            </h2>
+
+            <p
+              className="serif-italic m-0 max-w-[680px] text-ink-2"
+              style={{ fontSize: 'clamp(22px, 2.4vw, 36px)', lineHeight: 1.25 }}
+            >
+              Electrical engineer with three years of system integration, test automation, and V&amp;V
+              on embedded electromechanical platforms.
+            </p>
+
+            <p
+              className="m-0 max-w-[680px] font-sans text-ink-2"
+              style={{ fontSize: 'clamp(15px, 1.4vw, 21px)', lineHeight: 1.65 }}
+            >
+              From requirements through NPI and HVM readiness · strong in Python ATE,
+              DOE/SPC characterization, and cross-domain HW/FW/ME debug. M.S. EE (NTUT)
+              and B.Tech EE (IIT Ropar).
+            </p>
+
+            <ul className="mt-2 list-none p-0">
+              {FACTS.map((f, i) => (
+                <li
+                  key={f.k}
+                  className={`grid grid-cols-[140px_1fr] gap-6 border-t border-line py-5 md:grid-cols-[200px_1fr] md:gap-8 ${
+                    i === FACTS.length - 1 ? 'border-b border-line' : ''
+                  }`}
+                  style={{ alignItems: 'baseline' }}
+                >
+                  <span className="font-jakarta text-[11px] font-bold uppercase tracking-[0.28em] text-ink-3">
+                    {f.k}
+                  </span>
+                  <span className="font-sans text-[16px] font-medium text-ink md:text-[20px]">
+                    {f.v}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Portrait frame */}
+          <div className="media-frame min-h-[480px] lg:min-h-[640px]">
+            <img src="/profile%20image.png" alt="Ratan Lal Bunkar" />
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
-function SkillSlide({ skill, index, total, mountKey }) {
-  const { Icon, title, tagline, note, groups } = skill;
+/* ——— Skills volume slide ——— */
+function SkillVolume({ vol, idx }) {
   return (
-    <div key={mountKey} className="grid grid-cols-1 gap-10 md:grid-cols-12 md:gap-14">
-      {/* LEFT — title + meta */}
-      <div className="md:col-span-5">
-        <div className="slide-rise flex items-center gap-3">
-          <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-mint/40 bg-mint/10 text-mint">
-            <Icon className="h-5 w-5" strokeWidth={1.75} />
-          </span>
-          <div className="flex flex-col">
-            <span className="font-jakarta text-[10px] font-bold uppercase tracking-[0.3em] text-mint">
-              {String(index + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
+    <section className="relative w-full bg-paper py-20 md:py-28">
+      <div className="mx-auto max-w-[1440px] px-6 md:px-12">
+        {/* slide head */}
+        <div className="slide-head">
+          <div className="h-left">
+            <span className="num">
+              {String(idx * 3 + 4).padStart(2, '0')}–{String(idx * 3 + 6).padStart(2, '0')} / 12 ·
+              Skill Matrix {idx + 1} of 4
             </span>
-            <span className="font-jakarta text-[10px] font-bold uppercase tracking-[0.3em] text-white/45">
-              Skill Matrix
-            </span>
+            <span className="pipe" />
+            <span className="label">{vol.kicker}</span>
           </div>
+          <span className="signature">Volume {['one', 'two', 'three', 'four'][idx]}</span>
         </div>
 
-        <h3
-          className="slide-rise mt-7 font-sans text-[36px] font-extrabold uppercase leading-[0.98] tracking-tight text-white md:text-[52px]"
-          style={{ animationDelay: '120ms' }}
-        >
-          {title}
-          <span className="text-mint">.</span>
-        </h3>
-
-        <p
-          className="slide-rise mt-4 max-w-[440px] font-serif text-[20px] italic leading-[1.35] text-white/75 md:text-[22px]"
-          style={{ animationDelay: '200ms' }}
-        >
-          {tagline}
-        </p>
-
-        {note ? (
-          <p
-            className="slide-rise mt-4 font-jakarta text-[10px] font-bold uppercase tracking-[0.28em] text-mint/80"
-            style={{ animationDelay: '240ms' }}
-          >
-            {note}
-          </p>
-        ) : null}
-      </div>
-
-      {/* RIGHT — grouped capabilities */}
-      <div className="md:col-span-7">
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-          {groups.map((g, gi) => (
-            <div
-              key={g.h}
-              className="slide-rise rounded-2xl border border-white/10 bg-white/[0.02] p-5"
-              style={{ animationDelay: `${260 + gi * 80}ms` }}
+        {/* skill-slide-head */}
+        <div className="grid grid-cols-1 items-end gap-8 border-b border-ink pb-8 md:grid-cols-[1fr_auto] md:gap-14">
+          <div>
+            <p className="kicker">{vol.kicker}</p>
+            <h2
+              className="mt-3 font-sans font-extrabold uppercase tracking-[-0.03em] text-ink"
+              style={{ fontSize: 'clamp(38px, 6vw, 84px)', lineHeight: 0.96, margin: 0 }}
             >
-              <p className="font-jakarta text-[9px] font-bold uppercase tracking-[0.3em] text-mint">
-                {g.h}
+              {vol.headline[0]} {vol.headline[1]} {vol.headline[2]}
+              <span className="text-mint">.</span>
+            </h2>
+          </div>
+          <p
+            className="serif-italic whitespace-nowrap pb-2 text-ink-3"
+            style={{ fontSize: 'clamp(18px, 1.8vw, 28px)' }}
+          >
+            {vol.pages}
+          </p>
+        </div>
+
+        {/* 3-col skill grid */}
+        <div className="mt-12 grid grid-cols-1 gap-10 md:grid-cols-3 md:gap-0">
+          {vol.cols.map((c, i) => (
+            <div
+              key={c.num}
+              className={`flex flex-col gap-4 md:px-8 ${
+                i === 0 ? 'md:pl-0' : ''
+              } ${i === vol.cols.length - 1 ? 'md:border-r-0 md:pr-0' : 'md:border-r md:border-line'}`}
+            >
+              <span className="font-jakarta text-[12px] font-bold uppercase tracking-[0.28em] text-mint">
+                {c.num}
+                {c.sub ? (
+                  <span className="ml-2 font-medium tracking-[0.18em] text-ink-soft">
+                    {c.sub}
+                  </span>
+                ) : null}
+              </span>
+              <h3
+                className="font-sans font-bold tracking-[-0.015em] text-ink"
+                style={{ fontSize: 'clamp(20px, 2vw, 32px)', lineHeight: 1.05, margin: 0 }}
+              >
+                {c.h}
+              </h3>
+              <p
+                className="serif-italic m-0 border-b border-line pb-3 text-ink-2"
+                style={{ fontSize: 'clamp(16px, 1.5vw, 22px)', lineHeight: 1.3 }}
+              >
+                {c.tag}
               </p>
-              <ul className="mt-3 flex flex-wrap gap-1.5">
-                {g.items.map((it) => (
+              <ul className="m-0 flex list-none flex-col p-0">
+                {c.items.map((it, j) => (
                   <li
                     key={it}
-                    className="rounded-full border border-white/10 bg-white/[0.02] px-2.5 py-1 font-jakarta text-[10px] font-medium tracking-[0.04em] text-white/80"
+                    className={`font-sans text-[14px] font-medium text-ink-2 md:text-[17px] ${
+                      j === c.items.length - 1 ? '' : 'border-b border-line'
+                    } py-1.5`}
                   >
                     {it}
                   </li>
@@ -459,110 +355,11 @@ function SkillSlide({ skill, index, total, mountKey }) {
             </div>
           ))}
         </div>
-      </div>
-    </div>
-  );
-}
 
-function SkillsWalkthrough() {
-  const [current, setCurrent] = useState(0);
-  const [mountKey, setMountKey] = useState(0);
-  const ref = useRef(null);
-  const inView = useInView(ref, 0.35);
-  const total = SKILLS.length;
-  const p = SKILLS[current];
-
-  const next = useCallback(() => setCurrent((c) => Math.min(c + 1, total - 1)), [total]);
-  const prev = useCallback(() => setCurrent((c) => Math.max(c - 1, 0)), []);
-  const jump = useCallback((i) => setCurrent(i), []);
-
-  useKeyboardNav(inView, prev, next);
-
-  useEffect(() => {
-    setMountKey((k) => k + 1);
-  }, [current]);
-
-  const pct = ((current + 1) / total) * 100;
-  const label = useMemo(() => p.title, [p]);
-
-  return (
-    <section
-      ref={ref}
-      className="relative w-full overflow-hidden bg-ink text-white"
-    >
-      {/* ambient backgrounds */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            'radial-gradient(ellipse at 85% 10%, rgba(94,210,156,0.10), transparent 55%), radial-gradient(ellipse at 10% 90%, rgba(94,210,156,0.05), transparent 60%)',
-        }}
-      />
-      <div aria-hidden className="pointer-events-none absolute inset-0 hidden md:block">
-        {[25, 50, 75].map((pct) => (
-          <div
-            key={pct}
-            className="absolute top-0 h-full w-px bg-white/[0.05]"
-            style={{ left: `${pct}%` }}
-          />
-        ))}
-      </div>
-
-      {/* top meta */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-20">
-        <div className="mx-auto flex max-w-[1440px] items-center justify-between px-6 pt-8 md:px-10">
-          <span className="font-jakarta text-[10px] font-bold uppercase tracking-[0.3em] text-mint">
-            Skill Walkthrough
-          </span>
-        </div>
-
-        <div className="mx-auto mt-6 max-w-[1440px] px-6 md:px-10">
-          <div className="relative h-px w-full overflow-hidden bg-white/10">
-            <div
-              className="absolute left-0 top-0 h-full bg-mint transition-[width] duration-700 ease-out"
-              style={{ width: `${pct}%` }}
-            />
-          </div>
-        </div>
-      </div>
-
-      <ChapterRail total={total} current={current} onJump={jump} visible={inView} />
-
-      {/* slide content — full viewport */}
-      <div className="relative mx-auto flex min-h-screen max-w-[1440px] items-center px-6 pt-28 pb-28 md:px-10">
-        <div className="w-full">
-          <SkillSlide skill={p} index={current} total={total} mountKey={mountKey} />
-        </div>
-      </div>
-
-      {/* bottom controls */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 pb-8 md:pb-10">
-        <div className="mx-auto flex max-w-[1440px] items-center justify-between px-6 md:px-10">
-          <div className="pointer-events-auto flex items-center gap-3">
-            <button
-              type="button"
-              onClick={prev}
-              disabled={current === 0}
-              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/[0.03] text-white backdrop-blur-md transition hover:border-mint hover:text-mint disabled:cursor-not-allowed disabled:opacity-30"
-              aria-label="Previous skill"
-            >
-              <ArrowLeft className="h-4 w-4" />
-            </button>
-            <button
-              type="button"
-              onClick={next}
-              disabled={current === total - 1}
-              className="group inline-flex items-center gap-2 rounded-full bg-mint px-5 py-3 font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-ink transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-30"
-            >
-              {current === total - 1 ? 'End of matrix' : 'Next'}
-              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-            </button>
-          </div>
-
-          <div className="pointer-events-none hidden font-jakarta text-[10px] font-bold uppercase tracking-[0.3em] text-white/45 md:block">
-            {label}
-          </div>
+        {/* toolkit band */}
+        <div className="mt-10 flex items-center justify-between border-t border-ink pt-6 font-jakarta text-[11px] font-bold uppercase tracking-[0.24em] text-ink-3">
+          <span>{vol.vol} · {vol.kicker}</span>
+          <span>{vol.next}</span>
         </div>
       </div>
     </section>
@@ -572,86 +369,10 @@ function SkillsWalkthrough() {
 export default function AboutSection() {
   return (
     <>
-      {/* Intro — summary + facts */}
-      <section
-        id="about"
-        className="relative w-full overflow-hidden bg-ink py-28 text-white md:py-36"
-      >
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              'radial-gradient(ellipse at 15% 10%, rgba(94,210,156,0.08), transparent 55%), radial-gradient(ellipse at 85% 90%, rgba(94,210,156,0.06), transparent 60%)',
-          }}
-        />
-        <div aria-hidden className="pointer-events-none absolute inset-0 hidden md:block">
-          {[25, 50, 75].map((pct) => (
-            <div
-              key={pct}
-              className="absolute top-0 h-full w-px bg-white/[0.04]"
-              style={{ left: `${pct}%` }}
-            />
-          ))}
-        </div>
-
-        <div className="relative mx-auto max-w-[1440px] px-6 md:px-10">
-          <div className="grid grid-cols-1 items-end gap-10 md:grid-cols-12 md:gap-14">
-            <div className="md:col-span-7">
-              <div className="flex items-center gap-3">
-                <span className="font-jakarta text-[10px] font-bold uppercase tracking-[0.3em] text-mint">
-                  02 / ABOUT
-                </span>
-                <span className="h-px w-16 bg-white/20" />
-                <span className="font-jakarta text-[10px] font-bold uppercase tracking-[0.3em] text-white/50">
-                  A brief on the engineer
-                </span>
-              </div>
-
-              <h2 className="mt-6 font-sans text-[48px] font-extrabold uppercase leading-[0.95] tracking-tight text-white md:text-[84px]">
-                About<span className="text-mint">.</span>
-              </h2>
-
-              <p className="mt-8 max-w-[640px] font-sans text-[15px] leading-[1.75] text-white/75">
-                {SUMMARY}
-              </p>
-            </div>
-
-            <div className="md:col-span-5">
-              <ul className="divide-y divide-white/10 border-y border-white/10">
-                {FACTS.map(({ Icon, k, v }) => (
-                  <li key={k} className="flex items-center gap-4 py-4">
-                    <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/[0.03] text-mint">
-                      <Icon className="h-4 w-4" strokeWidth={1.75} />
-                    </span>
-                    <div className="flex min-w-0 flex-col">
-                      <span className="font-jakarta text-[9px] font-bold uppercase tracking-[0.3em] text-white/45">
-                        {k}
-                      </span>
-                      <span className="mt-0.5 font-sans text-[14px] font-medium text-white">
-                        {v}
-                      </span>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-
-          {/* Scroll hint to walkthrough */}
-          <div className="mt-20 flex items-center gap-4 border-t border-white/10 pt-8">
-            <span className="font-jakarta text-[10px] font-bold uppercase tracking-[0.3em] text-mint">
-              ↓ Skill walkthrough
-            </span>
-            <span className="font-sans text-[13px] text-white/55">
-              12 chapters · arrow keys to navigate
-            </span>
-          </div>
-        </div>
-      </section>
-
-      {/* Skills — journey style */}
-      <SkillsWalkthrough />
+      <ProfileSlide />
+      {SKILL_VOLUMES.map((v, i) => (
+        <SkillVolume key={v.vol} vol={v} idx={i} />
+      ))}
     </>
   );
 }

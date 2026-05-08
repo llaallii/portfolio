@@ -30,3 +30,7 @@ Thumbs.db
 # Cache
 .eslintcache
 .cache/
+
+# Local design handoffs / source bundles
+.design/
+*-handoff.zip
