@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ArrowRight,
+  ArrowLeft,
   Menu,
   X,
   Mail,
@@ -9,20 +10,24 @@ import {
   Check,
   Linkedin,
   ExternalLink,
-  Download,
+  Maximize2,
+  Minimize2,
 } from 'lucide-react';
-import ProjectsWalkthrough from './ProjectsWalkthrough.jsx';
-import AboutSection from './AboutSection.jsx';
+import { ProfileSlide, SkillVolume, SKILL_VOLUMES } from './AboutSection.jsx';
+import {
+  ProjectSlide,
+  OutcomeSlide,
+  ClosingSlide,
+  PROJECTS,
+  ELEXY,
+  OUTCOME_JIG,
+  OUTCOME_BENCH,
+} from './ProjectsWalkthrough.jsx';
 
 /* ============================================================
-   Boardroom — light, structured, reserved.
+   Boardroom · Slide deck
+   12 chapters, one per viewport. ← / → to advance.
    ============================================================ */
-
-const NAV = [
-  { label: 'PROJECTS', href: '#projects' },
-  { label: 'ABOUT', href: '#about' },
-  { label: 'RESUME', type: 'resume' },
-];
 
 const RESUME_URL = '/ratan-lal-bunkar-cv.pdf';
 const RESUME_FILENAME = 'Ratan-Lal-Bunkar-CV.pdf';
@@ -38,20 +43,97 @@ function openAndDownloadResume() {
   a.remove();
 }
 
-function ResumeButton() {
+/* ——— Title slide ——— */
+function TitleSlide({ onContact }) {
+  const facts = [
+    { k: 'Experience', v: '3+ years', s: 'SHL Technologies' },
+    { k: 'Education', v: 'M.S. EE · NTUT', s: 'B.Tech. EE · IIT Ropar' },
+    { k: 'Based in', v: 'Taoyuan, Taiwan', s: 'Open to relocate · Anywhere in Taiwan' },
+    { k: 'Targeting', v: 'Semiconductor industry', s: 'Test · Validation · Reliability · Service' },
+  ];
+
   return (
-    <button
-      type="button"
-      onClick={openAndDownloadResume}
-      className="font-jakarta text-[11px] font-bold uppercase tracking-[0.22em] text-ink/85 transition-colors duration-200 hover:text-mint"
-    >
-      RESUME
-    </button>
+    <section className="relative h-full w-full bg-paper">
+      <div className="mx-auto flex h-full max-w-[1440px] flex-col px-6 pb-10 pt-24 md:px-12 md:pt-28">
+        {/* Title band */}
+        <div className="rise flex items-center justify-between border-b border-ink pb-5">
+          <span className="font-jakarta text-[11px] font-bold uppercase tracking-[0.24em] text-ink-3">
+            Portfolio · 2026
+          </span>
+          <span className="hidden font-jakarta text-[11px] font-bold uppercase tracking-[0.24em] text-ink-3 md:inline">
+            Boardroom edition
+          </span>
+        </div>
+
+        {/* Display */}
+        <div className="rise mt-8 grid flex-1 grid-cols-1 items-end gap-8 pb-8 lg:mt-12 lg:grid-cols-2 lg:gap-16 lg:pb-10">
+          <h1
+            className="font-sans font-extrabold uppercase leading-[0.9] tracking-[-0.045em] text-ink"
+            style={{ fontSize: 'clamp(64px, 10vw, 156px)' }}
+          >
+            <span className="block">Systems</span>
+            <span className="block">
+              <span
+                className="serif-italic text-mint"
+                style={{ textTransform: 'lowercase', letterSpacing: '-0.005em' }}
+              >
+                engineer
+              </span>
+              <span className="text-mint">.</span>
+            </span>
+          </h1>
+
+          <p
+            className="serif-italic max-w-[560px] text-ink-2"
+            style={{ fontSize: 'clamp(18px, 2vw, 30px)', lineHeight: 1.3 }}
+          >
+            Three years turning ambiguous user needs into traceable, regulatory-aligned engineering
+            outcomes across NPD, NPI, and HVM readiness.
+          </p>
+        </div>
+
+        {/* CTA row */}
+        <div className="rise flex flex-wrap items-center gap-3 pb-8">
+          <button
+            type="button"
+            onClick={onContact}
+            className="group inline-flex items-center gap-3 rounded-full bg-ink px-6 py-3.5 font-jakarta text-[11px] font-bold uppercase tracking-[0.22em] text-paper transition hover:bg-mint"
+          >
+            Contact
+            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+          </button>
+          <button
+            type="button"
+            onClick={openAndDownloadResume}
+            className="inline-flex items-center gap-2 rounded-full border border-ink bg-paper px-6 py-3.5 font-jakarta text-[11px] font-bold uppercase tracking-[0.22em] text-ink transition hover:border-mint hover:text-mint"
+          >
+            <ExternalLink className="h-3.5 w-3.5" /> View Resume
+          </button>
+        </div>
+
+        {/* Footline */}
+        <div className="rise grid grid-cols-2 gap-x-8 gap-y-5 border-t border-ink pt-6 md:grid-cols-4 md:gap-x-10">
+          {facts.map((f) => (
+            <div key={f.k} className="flex flex-col">
+              <span className="font-jakarta text-[10px] font-bold uppercase tracking-[0.28em] text-ink-3">
+                {f.k}
+              </span>
+              <span className="mt-2 font-sans text-[15px] font-semibold leading-[1.2] text-ink md:text-[18px]">
+                {f.v}
+              </span>
+              <span className="mt-1 font-sans text-[11px] font-normal text-ink-3 md:text-[13px]">
+                {f.s}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
-/* ——— Logo · circular ink-bordered crest with mint dot ——— */
-function Crest({ size = 44 }) {
+/* ——— Logo ——— */
+function Crest({ size = 42 }) {
   return (
     <span
       className="relative inline-flex items-center justify-center rounded-full bg-paper"
@@ -83,129 +165,19 @@ function Crest({ size = 44 }) {
   );
 }
 
-function Logo({ className = '' }) {
+function Logo() {
   return (
-    <a href="#" className={`group flex items-center gap-3 ${className}`}>
-      <Crest size={42} />
-      <span className="flex flex-col leading-none">
-        <span className="font-sans text-[15px] font-bold tracking-[-0.01em] text-ink">
+    <span className="flex items-center gap-3">
+      <Crest size={40} />
+      <span className="hidden flex-col leading-none md:flex">
+        <span className="font-sans text-[14px] font-bold tracking-[-0.01em] text-ink">
           Ratan Lal Bunkar
         </span>
         <span className="mt-1 font-jakarta text-[9px] font-bold uppercase tracking-[0.28em] text-ink-3">
           Hardware &amp; Systems Engineer
         </span>
       </span>
-    </a>
-  );
-}
-
-/* ——— Header ——— */
-function Header({ onOpenMenu }) {
-  return (
-    <header className="absolute inset-x-0 top-0 z-40">
-      <div className="mx-auto flex max-w-[1440px] items-center justify-between px-6 py-6 md:px-10 md:py-8">
-        <Logo />
-
-        <nav className="hidden items-center gap-9 md:flex">
-          {NAV.map((item) =>
-            item.type === 'resume' ? (
-              <ResumeButton key={item.label} />
-            ) : (
-              <a
-                key={item.label}
-                href={item.href}
-                className="font-jakarta text-[11px] font-bold uppercase tracking-[0.22em] text-ink/85 transition-colors duration-200 hover:text-mint"
-              >
-                {item.label}
-              </a>
-            )
-          )}
-        </nav>
-
-        <button
-          type="button"
-          aria-label="Open menu"
-          onClick={onOpenMenu}
-          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-line-strong bg-paper text-ink md:hidden"
-        >
-          <Menu className="h-5 w-5" />
-        </button>
-      </div>
-    </header>
-  );
-}
-
-function MobileMenu({ open, onClose }) {
-  useEffect(() => {
-    document.body.style.overflow = open ? 'hidden' : '';
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [open]);
-
-  return (
-    <div
-      aria-hidden={!open}
-      className={`fixed inset-0 z-50 transition-opacity duration-500 md:hidden ${
-        open ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
-      }`}
-    >
-      <div className="absolute inset-0 bg-paper" />
-      <div className="relative flex h-full flex-col px-6 py-6">
-        <div className="flex items-center justify-between">
-          <Logo />
-          <button
-            type="button"
-            aria-label="Close menu"
-            onClick={onClose}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-line-strong bg-paper text-ink"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
-
-        <nav className="mt-12 flex flex-col">
-          {NAV.map((item, i) =>
-            item.type === 'resume' ? (
-              <button
-                key={item.label}
-                type="button"
-                onClick={() => {
-                  openAndDownloadResume();
-                  onClose();
-                }}
-                style={{ animationDelay: `${120 + i * 80}ms` }}
-                className="rise border-b border-line py-6 text-left font-sans text-[40px] font-extrabold uppercase tracking-tight text-ink transition-colors duration-300 hover:text-mint"
-              >
-                Resume
-              </button>
-            ) : (
-              <a
-                key={item.label}
-                href={item.href}
-                onClick={onClose}
-                style={{ animationDelay: `${120 + i * 80}ms` }}
-                className="rise border-b border-line py-6 font-sans text-[40px] font-extrabold uppercase tracking-tight text-ink transition-colors duration-300 hover:text-mint"
-              >
-                {item.label}
-              </a>
-            )
-          )}
-        </nav>
-
-        <div className="mt-auto space-y-3">
-          <p className="font-jakarta text-[10px] font-bold uppercase tracking-[0.28em] text-mint">
-            Currently in Taoyuan, Taiwan
-          </p>
-          <a
-            href="mailto:ratanbunkar2@gmail.com"
-            className="block font-serif text-[20px] italic text-ink"
-          >
-            ratanbunkar2@gmail.com
-          </a>
-        </div>
-      </div>
-    </div>
+    </span>
   );
 }
 
@@ -217,11 +189,7 @@ function ContactModal({ open, onClose }) {
     if (!open) return;
     const onKey = (e) => e.key === 'Escape' && onClose();
     window.addEventListener('keydown', onKey);
-    document.body.style.overflow = 'hidden';
-    return () => {
-      window.removeEventListener('keydown', onKey);
-      document.body.style.overflow = '';
-    };
+    return () => window.removeEventListener('keydown', onKey);
   }, [open, onClose]);
 
   const copy = async (value, key) => {
@@ -243,7 +211,7 @@ function ContactModal({ open, onClose }) {
   return (
     <div
       aria-hidden={!open}
-      className={`fixed inset-0 z-[60] flex items-center justify-center px-4 transition-opacity duration-300 ${
+      className={`fixed inset-0 z-[80] flex items-center justify-center px-4 transition-opacity duration-300 ${
         open ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
       }`}
     >
@@ -325,108 +293,277 @@ function ContactModal({ open, onClose }) {
   );
 }
 
-/* ====================================================================
-   TITLE SLIDE — Hero
-   Title band · 168px display · footline grid
-   ==================================================================== */
-function Hero() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [contactOpen, setContactOpen] = useState(false);
-
-  const facts = [
-    { k: 'Experience', v: '3+ years', s: 'SHL Technologies' },
-    { k: 'Education', v: 'M.S. EE · NTUT', s: 'B.Tech. EE · IIT Ropar' },
-    { k: 'Based in', v: 'Taoyuan, Taiwan', s: 'Open to relocate · Anywhere in Taiwan' },
-    { k: 'Targeting', v: 'Semiconductor industry', s: 'Test · Validation · Reliability · Service' },
-  ];
-
-  return (
-    <section className="relative min-h-screen w-full bg-paper">
-      <Header onOpenMenu={() => setMenuOpen(true)} />
-      <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
-      <ContactModal open={contactOpen} onClose={() => setContactOpen(false)} />
-
-      <div className="mx-auto flex min-h-screen max-w-[1440px] flex-col px-6 pb-14 pt-28 md:px-12 md:pt-36">
-        {/* Title band — under header */}
-        <div className="rise flex items-center justify-between border-b border-ink pb-6">
-          <span className="meta-pill font-jakarta text-[11px] font-bold uppercase tracking-[0.24em] text-ink-3">
-            Portfolio · 2026
-          </span>
-          <span className="hidden font-jakarta text-[11px] font-bold uppercase tracking-[0.24em] text-ink-3 md:inline">
-            Boardroom edition
-          </span>
-        </div>
-
-        {/* Display — two-column at lg, stacked on mobile */}
-        <div className="rise mt-12 grid flex-1 grid-cols-1 items-end gap-10 pb-12 lg:mt-20 lg:grid-cols-2 lg:gap-20 lg:pb-20">
-          <h1
-            className="font-sans font-extrabold uppercase leading-[0.9] tracking-[-0.045em] text-ink"
-            style={{ fontSize: 'clamp(72px, 12vw, 168px)' }}
-          >
-            <span className="block">Systems</span>
-            <span className="block">
-              <span className="serif-italic text-mint" style={{ textTransform: 'lowercase', letterSpacing: '-0.005em' }}>
-                engineer
-              </span>
-              <span className="text-mint">.</span>
-            </span>
-          </h1>
-
-          <p
-            className="serif-italic max-w-[560px] text-ink-2"
-            style={{ fontSize: 'clamp(20px, 2.2vw, 32px)', lineHeight: 1.3 }}
-          >
-            Three years turning ambiguous user needs into traceable, regulatory-aligned engineering
-            outcomes across NPD, NPI, and HVM readiness.
-          </p>
-        </div>
-
-        {/* CTA row */}
-        <div className="rise flex flex-wrap items-center gap-3 pb-10">
-          <button
-            type="button"
-            onClick={() => setContactOpen(true)}
-            className="group inline-flex items-center gap-3 rounded-full bg-ink px-6 py-3.5 font-jakarta text-[11px] font-bold uppercase tracking-[0.22em] text-paper transition hover:bg-mint"
-          >
-            Contact
-            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-          </button>
-          <button
-            type="button"
-            onClick={openAndDownloadResume}
-            className="inline-flex items-center gap-2 rounded-full border border-ink bg-paper px-6 py-3.5 font-jakarta text-[11px] font-bold uppercase tracking-[0.22em] text-ink transition hover:border-mint hover:text-mint"
-          >
-            <ExternalLink className="h-3.5 w-3.5" /> View Resume
-          </button>
-        </div>
-
-        {/* Footline — 4-cell grid */}
-        <div className="rise grid grid-cols-2 gap-x-8 gap-y-7 border-t border-ink pt-7 md:grid-cols-4 md:gap-x-10">
-          {facts.map((f) => (
-            <div key={f.k} className="flex flex-col">
-              <span className="font-jakarta text-[10px] font-bold uppercase tracking-[0.28em] text-ink-3">
-                {f.k}
-              </span>
-              <span className="mt-2 font-sans text-[17px] font-semibold leading-[1.2] text-ink md:text-[19px]">
-                {f.v}
-              </span>
-              <span className="mt-1 font-sans text-[12px] font-normal text-ink-3 md:text-[13px]">
-                {f.s}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
+/* ============================================================
+   Deck shell
+   ============================================================ */
+function useFullscreen() {
+  const [isFs, setIsFs] = useState(false);
+  useEffect(() => {
+    const onChange = () => setIsFs(!!document.fullscreenElement);
+    document.addEventListener('fullscreenchange', onChange);
+    return () => document.removeEventListener('fullscreenchange', onChange);
+  }, []);
+  const toggle = useCallback(async () => {
+    try {
+      if (!document.fullscreenElement) {
+        await document.documentElement.requestFullscreen();
+      } else {
+        await document.exitFullscreen();
+      }
+    } catch {
+      /* ignore */
+    }
+  }, []);
+  return [isFs, toggle];
 }
 
 export default function App() {
+  const [contactOpen, setContactOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [isFs, toggleFs] = useFullscreen();
+
+  // Build the deck
+  const slides = useMemo(
+    () => [
+      { key: 'title', label: 'Title', render: () => <TitleSlide onContact={() => setContactOpen(true)} /> },
+      { key: 'about', label: 'About', render: () => <ProfileSlide /> },
+      ...SKILL_VOLUMES.map((vol, idx) => ({
+        key: `skill-${idx}`,
+        label: `Vol. ${idx + 1} · ${vol.kicker}`,
+        render: () => <SkillVolume vol={vol} idx={idx} />,
+      })),
+      { key: 'smarthub', label: 'Ch. 01 · SmartHub', render: () => <ProjectSlide p={PROJECTS[0]} /> },
+      { key: 'molly', label: 'Ch. 02 · Molly cCap', render: () => <ProjectSlide p={PROJECTS[1]} /> },
+      { key: 'jig', label: 'Outcomes · Jig', render: () => <OutcomeSlide {...OUTCOME_JIG} /> },
+      { key: 'elexy', label: 'Ch. 03 · Elexy', render: () => <ProjectSlide p={ELEXY} /> },
+      { key: 'bench', label: 'Outcomes · Bench', render: () => <OutcomeSlide {...OUTCOME_BENCH} /> },
+      { key: 'closing', label: "Let's talk", render: () => <ClosingSlide /> },
+    ],
+    []
+  );
+  const total = slides.length;
+  const [current, setCurrent] = useState(0);
+
+  const next = useCallback(() => setCurrent((c) => Math.min(c + 1, total - 1)), [total]);
+  const prev = useCallback(() => setCurrent((c) => Math.max(c - 1, 0)), []);
+  const jump = useCallback((i) => setCurrent(i), []);
+
+  // Keyboard nav — disabled when modal/menu open
+  useEffect(() => {
+    if (contactOpen || menuOpen) return;
+    const handler = (e) => {
+      if (e.target && /INPUT|TEXTAREA/.test(e.target.tagName)) return;
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        next();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        prev();
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        setCurrent(0);
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        setCurrent(total - 1);
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [next, prev, total, contactOpen, menuOpen]);
+
+  // Lock page scroll — this is a deck, not a scroll site
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
+
+  const pct = ((current + 1) / total) * 100;
+  const cur = slides[current];
+
   return (
-    <>
-      <Hero />
-      <AboutSection />
-      <ProjectsWalkthrough />
-    </>
+    <div className="relative h-screen w-screen overflow-hidden bg-paper">
+      {/* Top progress bar */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-50 h-[2px] bg-line">
+        <div
+          className="absolute left-0 top-0 h-full bg-mint transition-[width] duration-700 ease-out"
+          style={{ width: `${pct}%` }}
+        />
+      </div>
+
+      {/* Header */}
+      <header className="absolute inset-x-0 top-0 z-40">
+        <div className="mx-auto flex max-w-[1440px] items-center justify-between px-6 py-5 md:px-12 md:py-6">
+          <button
+            type="button"
+            onClick={() => setCurrent(0)}
+            className="group flex items-center gap-3"
+            aria-label="Back to title"
+          >
+            <Logo />
+          </button>
+
+          <nav className="hidden items-center gap-9 md:flex">
+            <button
+              type="button"
+              onClick={() => setCurrent(1)}
+              className="font-jakarta text-[11px] font-bold uppercase tracking-[0.22em] text-ink/85 transition-colors duration-200 hover:text-mint"
+            >
+              About
+            </button>
+            <button
+              type="button"
+              onClick={() => setCurrent(6)}
+              className="font-jakarta text-[11px] font-bold uppercase tracking-[0.22em] text-ink/85 transition-colors duration-200 hover:text-mint"
+            >
+              Projects
+            </button>
+            <button
+              type="button"
+              onClick={openAndDownloadResume}
+              className="font-jakarta text-[11px] font-bold uppercase tracking-[0.22em] text-ink/85 transition-colors duration-200 hover:text-mint"
+            >
+              Resume
+            </button>
+            <button
+              type="button"
+              onClick={() => setContactOpen(true)}
+              className="font-jakarta text-[11px] font-bold uppercase tracking-[0.22em] text-ink/85 transition-colors duration-200 hover:text-mint"
+            >
+              Contact
+            </button>
+          </nav>
+
+          <button
+            type="button"
+            aria-label="Open menu"
+            onClick={() => setMenuOpen(true)}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-line-strong bg-paper text-ink md:hidden"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
+        </div>
+      </header>
+
+      {/* Slides */}
+      <div className="absolute inset-0">
+        {slides.map((slide, i) => (
+          <div
+            key={slide.key}
+            aria-hidden={i !== current}
+            className={`absolute inset-0 overflow-y-auto transition-opacity duration-500 ${
+              i === current ? 'pointer-events-auto z-10 opacity-100' : 'pointer-events-none z-0 opacity-0'
+            }`}
+          >
+            <div key={i === current ? 'on' : 'off'} className="h-full">
+              {/* re-mount on enter for animation refresh */}
+              {i === current ? slide.render() : slide.render()}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Bottom controls */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-40 px-6 pb-5 md:px-12 md:pb-6">
+        <div className="mx-auto flex max-w-[1440px] items-end justify-between gap-3">
+          {/* Prev / Next + Presentation */}
+          <div className="pointer-events-auto flex items-center gap-2">
+            <button
+              type="button"
+              onClick={prev}
+              disabled={current === 0}
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-line-strong bg-paper text-ink transition hover:border-mint hover:text-mint disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:border-line-strong disabled:hover:text-ink"
+              aria-label="Previous slide"
+            >
+              <ArrowLeft className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={next}
+              disabled={current === total - 1}
+              className="group inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 font-jakarta text-[10px] font-bold uppercase tracking-[0.22em] text-paper transition hover:bg-mint disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-ink"
+            >
+              {current === total - 1 ? 'End of deck' : 'Next'}
+              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+            </button>
+            <button
+              type="button"
+              onClick={toggleFs}
+              className="ml-2 inline-flex items-center gap-2 rounded-full border border-line-strong bg-paper px-3.5 py-2 font-jakarta text-[10px] font-bold uppercase tracking-[0.22em] text-ink-3 transition hover:border-mint hover:text-mint"
+              aria-label={isFs ? 'Exit presentation' : 'Enter presentation'}
+            >
+              {isFs ? (
+                <>
+                  <Minimize2 className="h-3 w-3" /> Exit
+                </>
+              ) : (
+                <>
+                  <Maximize2 className="h-3 w-3" /> Present
+                </>
+              )}
+            </button>
+          </div>
+
+          {/* Counter + label */}
+          <div className="pointer-events-none flex flex-col items-end gap-0.5 text-right">
+            <span className="font-jakarta text-[10px] font-bold uppercase tracking-[0.22em] text-mint">
+              {String(current + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
+            </span>
+            <span className="hidden font-jakarta text-[10px] font-bold uppercase tracking-[0.22em] text-ink-3 md:block">
+              {cur.label}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile menu overlay */}
+      <div
+        aria-hidden={!menuOpen}
+        className={`fixed inset-0 z-[70] transition-opacity duration-300 md:hidden ${
+          menuOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
+        }`}
+      >
+        <div className="absolute inset-0 bg-paper" />
+        <div className="relative flex h-full flex-col px-6 py-6">
+          <div className="flex items-center justify-between">
+            <Logo />
+            <button
+              type="button"
+              aria-label="Close menu"
+              onClick={() => setMenuOpen(false)}
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-line-strong bg-paper text-ink"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+          <nav className="mt-12 flex flex-col">
+            {[
+              { label: 'Title', i: 0 },
+              { label: 'About', i: 1 },
+              { label: 'Skills', i: 2 },
+              { label: 'Projects', i: 6 },
+              { label: 'Contact', cb: () => setContactOpen(true) },
+              { label: 'Resume', cb: openAndDownloadResume },
+            ].map((item) => (
+              <button
+                key={item.label}
+                type="button"
+                onClick={() => {
+                  if (item.cb) item.cb();
+                  else setCurrent(item.i);
+                  setMenuOpen(false);
+                }}
+                className="border-b border-line py-5 text-left font-sans text-[28px] font-extrabold uppercase tracking-tight text-ink hover:text-mint"
+              >
+                {item.label}
+              </button>
+            ))}
+          </nav>
+        </div>
+      </div>
+
+      <ContactModal open={contactOpen} onClose={() => setContactOpen(false)} />
+    </div>
   );
 }
